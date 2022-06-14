@@ -13,7 +13,7 @@ if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 
 if settings.DEBUG == True:
-    SQLALCHEMY_DATABASE_URL = settings.DEVELOPMENT_DATABASE_URL
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 else:
     SQLALCHEMY_DATABASE_URL = uri
 

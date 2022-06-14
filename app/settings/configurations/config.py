@@ -6,7 +6,7 @@ from pathlib import Path
 
 class Settings(BaseSettings):
     APP_NAME:str
-    DEVELOPMENT_DATABASE_URL:str
+
     DATABASE_URL:str
     DEBUG:bool
 
