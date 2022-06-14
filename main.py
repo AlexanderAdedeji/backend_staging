@@ -42,4 +42,4 @@ app = create_appication_instance()
 
 @app.get('/')
 async def root():
-    return _responses.RedirectResponse("/docs'")
+    return _responses.RedirectResponse("/docs")
