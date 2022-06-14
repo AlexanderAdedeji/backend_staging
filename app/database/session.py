@@ -6,7 +6,7 @@ from app.settings.configurations.config import Settings
 
 
 
-settings =Settings
+settings =Settings()
 
 uri = settings.DATABASE_URL
 if uri.startswith("postgres://"):
