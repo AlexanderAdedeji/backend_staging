@@ -1,4 +1,5 @@
-from sqlalchemy import Integer, Column, Boolean, String
+from typing import ByteString
+from sqlalchemy import Integer, Column, Boolean, String, LargeBinary 
 from app.commonLib.models import Base
 
 
@@ -21,7 +22,7 @@ class SavedDocuments(Base):
     middle_name= Column(String, nullable=False)
     nationality= Column(String, nullable=False)
     docNo= Column(String, nullable=False)
-    qr_code= Column(String, nullable=False)
+    qr_code= Column(LargeBinary, nullable=False)
 
     
  

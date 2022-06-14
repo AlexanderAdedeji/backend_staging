@@ -1,3 +1,5 @@
+
+from codecs import encode
 from fastapi import APIRouter, Depends, HTTPException
 from app.api.dependencies.db import get_db
 import qrcode
@@ -40,7 +42,9 @@ def save_document(document:SaveDocument,db:Session= Depends(get_db)):
     img = qr.make_image(fill='black', back_color='white')
     buffered = BytesIO()
     img.save(buffered, format="JPEG")
-    img_str = Utilities.convert_to_base_64(buffered.getvalue())
+    # img_str = Utilities.convert_to_base_64(buffered.getvalue())
+    img_str= encode(buffered.getvalue(),encoding='base64')
+    print(img_str)
     documentObj = SavedDocuments(id=result1.upper(),user_id=document.user_id, document_category=document.document_category_id, court=document.court,
     state= document.state,
     city=document.city,
