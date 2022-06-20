@@ -56,7 +56,10 @@ def save_document(document:SaveDocument,db:Session= Depends(get_db)):
     middle_name=document.middle_name,
     nationality= document.nationality,
     docNo=document.docNo,
-    qr_code=img_str
+    qr_code=img_str,
+    docType=document.docType,
+    issuer=document.issuer,
+    issuerAddress=document.issuerAddress
 )
     db.add(documentObj)
     db.commit()

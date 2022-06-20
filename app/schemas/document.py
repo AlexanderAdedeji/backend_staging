@@ -22,6 +22,9 @@ class SaveDocument(BaseModel):
     middle_name:str
     nationality:str
     docNo:str
+    docType:str
+    issuer:str
+    issuerAddress:str
     
 
 
@@ -42,6 +45,9 @@ class ShowSaveDocument(BaseModel):
     middle_name:str
     nationality:str
     docNo:str
+    docType:str
+    issuer:str
+    issuerAddress:str
     
 
 

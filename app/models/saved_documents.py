@@ -23,6 +23,9 @@ class SavedDocuments(Base):
     nationality= Column(String, nullable=False)
     docNo= Column(String, nullable=False)
     qr_code= Column(LargeBinary, nullable=False)
+    docType= Column(String, nullable=False)
+    issuer= Column(String, nullable=False)
+    issuerAddress= Column(String, nullable=False)
 
     
  
