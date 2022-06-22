@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Column, Boolean, String
+from sqlalchemy import Integer, Column, Boolean, String,LargeBinary
 from app.commonLib.models import Base
 
 
@@ -12,4 +12,5 @@ class Commissioner(Base):
     email = Column(String, nullable=False)
     phone= Column(String, nullable=False)
     hashed_password=Column(String, nullable=False)
+    signature=Column(String, nullable=True)
     

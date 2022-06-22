@@ -3,7 +3,7 @@ from app.models.saved_documents import SavedDocuments
 from app.models.users import User
 from app.repository.commissioner import commissioner_repo
 from app.repository.users import user_repo
-from app.schemas.commissioner import Commissioner, CommissionerCreate, CommissionerLogin, CommissionerValidated
+from app.schemas.commissioner import Commissioner, CommissionerCreate, CommissionerLogin, CommissionerValidated, UploadSignature
 from app.schemas.user import UserCreate, UserLogin, User,UserValidated
 from sqlalchemy.orm import Session
 from app.settings.utilities import Utilities
@@ -27,7 +27,8 @@ def Login(login: CommissionerLogin,db: Session = Depends(get_db)):
                 id=commissioner.id,
                 email = commissioner.email,
                 first_name=commissioner.first_name,
-                last_name=commissioner.last_name
+                last_name=commissioner.last_name,
+                signature=commissioner.signature
           
 
             )
@@ -54,6 +55,8 @@ def signUp(commissioner: CommissionerCreate, db:Session= Depends(get_db)):
         )
     
     
+    
+    
 
 
 @router.get("/get_document" )
@@ -67,6 +70,18 @@ def signUp(documentRef:str, db:Session= Depends(get_db)):
     
 
     
-    
-    
-    
+@router.put("/update_signature", response_model=CommissionerValidated)
+def updateSignature(upload_signature:UploadSignature, db:Session=Depends(get_db)):
+    commissioner = commissioner_repo.get(db, id=upload_signature.id)
+    if not commissioner:
+        raise HTTPException(status_code=403, detail ='this Commissioner does not exists')
+
+
+    commissioner_repo.set_signature(db, db_obj=commissioner,signature=upload_signature.signature)
+    return CommissionerValidated(
+                        id=commissioner.id,
+                email = commissioner.email,
+                first_name=commissioner.first_name,
+                last_name=commissioner.last_name,
+                signature=commissioner.signature
+    )
