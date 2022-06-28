@@ -2,10 +2,8 @@ from fastapi import FastAPI
 from app.api.routes.routes import router as global_router
 from starlette.middleware.cors import CORSMiddleware
 import starlette.responses as _responses
-from app.models import users
-from app.models import paid_documents
-from app.models import saved_documents
-from app.models import commissioner
+from app.models import users, paid_documents, saved_documents, commissioner, attested_documents
+
 
 
 from app.database.session import SessionLocal, engine
@@ -15,6 +13,7 @@ paid_documents.Base.metadata.create_all(bind=engine)
 saved_documents.Base.metadata.create_all(bind=engine)
 users.Base.metadata.create_all(bind=engine)
 commissioner.Base.metadata.create_all(bind=engine)
+attested_documents.Base.metadata.create_all(bind=engine)
 
 
 

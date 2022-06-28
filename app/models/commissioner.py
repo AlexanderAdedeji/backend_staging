@@ -13,4 +13,5 @@ class Commissioner(Base):
     phone= Column(String, nullable=False)
     hashed_password=Column(String, nullable=False)
     signature=Column(String, nullable=True)
+    stamp=Column(String, nullable=True)
     

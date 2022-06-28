@@ -1,9 +1,11 @@
 from app.api.dependencies.db import get_db
+from app.models.attested_documents import AttestedDocuments
 from app.models.saved_documents import SavedDocuments
 from app.models.users import User
 from app.repository.commissioner import commissioner_repo
 from app.repository.users import user_repo
-from app.schemas.commissioner import Commissioner, CommissionerCreate, CommissionerLogin, CommissionerValidated, UploadSignature
+from app.schemas.commissioner import Commissioner, CommissionerCreate, CommissionerLogin, CommissionerValidated, UploadSignature, UploadStamp
+from app.schemas.document import AttestDocument
 from app.schemas.user import UserCreate, UserLogin, User,UserValidated
 from sqlalchemy.orm import Session
 from app.settings.utilities import Utilities
@@ -85,3 +87,32 @@ def updateSignature(upload_signature:UploadSignature, db:Session=Depends(get_db)
                 last_name=commissioner.last_name,
                 signature=commissioner.signature
     )
+
+
+
+@router.put("/update_stamp", response_model=CommissionerValidated)
+def updateSignature(upload_stamp:UploadStamp, db:Session=Depends(get_db)):
+    commissioner = commissioner_repo.get(db, id=upload_stamp.id)
+    if not commissioner:
+        raise HTTPException(status_code=403, detail ='this Commissioner does not exists')
+
+
+    commissioner_repo.set_stamp(db, db_obj=commissioner,stamp=upload_stamp.stamp)
+    return CommissionerValidated(
+                        id=commissioner.id,
+                email = commissioner.email,
+                first_name=commissioner.first_name,
+                last_name=commissioner.last_name,
+                signature=commissioner.signature,
+                stamp=commissioner.stamp
+    )
+
+
+
+@router.post('/attest_document')
+def attest_document(doc:AttestDocument, db:Session =Depends(get_db)):
+    documentToAttest = AttestedDocuments(**doc.dict())
+    db.add(documentToAttest)
+    db.commit()
+    db.refresh(documentToAttest)
+    return documentToAttest

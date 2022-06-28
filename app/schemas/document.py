@@ -9,7 +9,7 @@ class Document(BaseModel):
 
 
 class SaveDocument(BaseModel):
-    document_category_id:int
+    document_category_id:str
     user_id:int
     court:str
     state:str
@@ -25,13 +25,15 @@ class SaveDocument(BaseModel):
     docType:str
     issuer:str
     issuerAddress:str
+    deponentImage:str
+    price:str
     
 
 
 
 
 class ShowSaveDocument(BaseModel):
-    document_category_id:int
+    document_category_id:str
     id:str
     user_id:int
     court:str
@@ -63,3 +65,6 @@ class PayForDocument(BaseModel):
 
 
     
+class AttestDocument(BaseModel):
+    document_ref:str
+    document:str

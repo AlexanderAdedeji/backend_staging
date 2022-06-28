@@ -8,6 +8,7 @@ import string
 import random
 import uuid
 from io import BytesIO
+from app.models.attested_documents import AttestedDocuments
 from app.models.paid_documents import PaidDocuments
 from app.models.saved_documents import SavedDocuments
 
@@ -30,21 +31,19 @@ def get_single_document(id:int):
 
 @router.post("/save_document")
 def save_document(document:SaveDocument,db:Session= Depends(get_db)):
-    letters = string.ascii_lowercase # define the specific string  
-    # define the condition for random.sample() method  
-    result1 = ''.join((random.sample(letters, 10)))   
+    letters = string.ascii_lowercase 
+    result1 = ''.join((random.sample(letters, 10)))  
+    input_data = f"https://eaffidavit-dev.netlify.app/qr-searchDocument/{result1.upper()}" 
     qr = qrcode.QRCode(
         version=1,
         box_size=10,
         border=5)
-    qr.add_data(result1.upper())
+    qr.add_data(input_data)
     qr.make(fit=True)
     img = qr.make_image(fill='black', back_color='white')
     buffered = BytesIO()
     img.save(buffered, format="JPEG")
-    # img_str = Utilities.convert_to_base_64(buffered.getvalue())
     img_str= encode(buffered.getvalue(),encoding='base64')
-    print(img_str)
     documentObj = SavedDocuments(id=result1.upper(),user_id=document.user_id, document_category=document.document_category_id, court=document.court,
     state= document.state,
     city=document.city,
@@ -59,19 +58,21 @@ def save_document(document:SaveDocument,db:Session= Depends(get_db)):
     qr_code=img_str,
     docType=document.docType,
     issuer=document.issuer,
-    issuerAddress=document.issuerAddress
+    issuerAddress=document.issuerAddress,
+    deponentImage=document.deponentImage,
+    price=document.price
 )
     db.add(documentObj)
     db.commit()
     db.refresh(documentObj)
-    print(document)
+
     return documentObj
 
 
 
 @router.post("/pay_for_document")
 def pay_for_document(payment_data:PayForDocument,db:Session= Depends(get_db)):
-    print(payment_data)
+
     paymentObj = PaidDocuments(user_id=payment_data.user_id, saved_document_id=payment_data.saved_document_id,payment_ref=payment_data.transaction_id)
     db.add(paymentObj)
     db.commit()
@@ -91,7 +92,7 @@ def random_ref(length:int):
     
     input_data = "https://towardsdatascience.com/face-detection-in-10-lines-for-beginners-1787aa1d9127"
     result1 = ''.join((random.sample(letters, length)))   
-    print(" Random generated string without repetition: ", result1)
+
     qr = qrcode.QRCode(
         version=1,
         box_size=10,
@@ -107,3 +108,15 @@ def random_ref(length:int):
     
 
     return img_str
+
+
+
+
+
+
+@router.post("/get_document_in_qr")
+def get_document_in_qr(documentRef:str, db:Session =Depends(get_db)): 
+    document = db.query(AttestedDocuments).filter(AttestedDocuments.document_ref==documentRef).first()
+    if not document:
+        raise HTTPException(status=404, detail=f"Document with id {documentRef} does not exist")
+    return document

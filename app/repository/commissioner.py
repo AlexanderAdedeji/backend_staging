@@ -35,6 +35,8 @@ class CommissionerRepositories(Base[Commissioner]):
         return super().update(db, db_obj=db_obj, obj_in={"is_active": status})
     def set_signature(self, db: Session,*, db_obj: Commissioner, signature:str):
             return super().update(db, db_obj=db_obj, obj_in={"signature": signature})
+    def set_stamp(self, db: Session,*, db_obj: Commissioner, stamp:str):
+            return super().update(db, db_obj=db_obj, obj_in={"stamp": stamp})
     
     def activate(self,db: Session, *, db_obj:Commissioner):
         return self.set_activation_status(db=db, db_obj=db_obj, status=True)

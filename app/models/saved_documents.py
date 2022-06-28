@@ -1,4 +1,5 @@
-from typing import ByteString
+from pickle import TRUE
+from typing import ByteString, Text
 from sqlalchemy import Integer, Column, Boolean, String, LargeBinary 
 from app.commonLib.models import Base
 
@@ -14,18 +15,22 @@ class SavedDocuments(Base):
     court= Column(String, nullable=False)
     state= Column(String, nullable=False)
     city= Column(String, nullable=False)
-    first_name= Column(String, nullable=False)
-    last_name= Column(String, nullable=False)
-    religion= Column(String, nullable=False)
-    gender= Column(String, nullable=False)
-    address= Column(String, nullable=False)
-    middle_name= Column(String, nullable=False)
-    nationality= Column(String, nullable=False)
-    docNo= Column(String, nullable=False)
-    qr_code= Column(LargeBinary, nullable=False)
-    docType= Column(String, nullable=False)
-    issuer= Column(String, nullable=False)
-    issuerAddress= Column(String, nullable=False)
+    first_name= Column(String, nullable=True)
+    last_name= Column(String, nullable=True)
+    religion= Column(String, nullable=True)
+    gender= Column(String, nullable=True)
+    address= Column(String, nullable=True)
+    middle_name= Column(String, nullable=True)
+    nationality= Column(String, nullable=True)
+    docNo= Column(String, nullable=True)
+    qr_code= Column(LargeBinary, nullable=True)
+    docType= Column(String, nullable=True)
+    issuer= Column(String, nullable=True)
+    issuerAddress= Column(String, nullable=True)
+    deponentImage=Column(String, nullable=True)
+    price=Column(String, nullable=True)
+
+    
 
     
  

@@ -27,8 +27,14 @@ class CommissionerLogin(BaseModel):
 class CommissionerValidated(Commissioner):
     id:str
     signature:Optional[str]
+    stamp:Optional[str]
     
 class UploadSignature(BaseModel):
     id:str
     signature:str
+
+
+class UploadStamp(BaseModel):
+    id:str
+    stamp:str
     
