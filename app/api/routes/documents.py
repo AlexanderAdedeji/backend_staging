@@ -12,7 +12,7 @@ from app.models.attested_documents import AttestedDocuments
 from app.models.paid_documents import PaidDocuments
 from app.models.saved_documents import SavedDocuments
 
-from app.schemas.document import  PayForDocument, SaveDocument
+from app.schemas.document import  Document, PayForDocument, SaveDocument
 from app.settings.utilities import Utilities
 
 
@@ -120,3 +120,10 @@ def get_document_in_qr(documentRef:str, db:Session =Depends(get_db)):
     if not document:
         raise HTTPException(status=404, detail=f"Document with id {documentRef} does not exist")
     return document
+
+
+
+@router.get("/get_documents_saved_by_user")
+def get_documents_saved_by_user(user_id:str, db:Session =Depends(get_db)):
+    documents = db.query(SavedDocuments.document_category,SavedDocuments.id, SavedDocuments).outerjoin(PaidDocuments, PaidDocuments.saved_document_id == SavedDocuments.id).outerjoin(AttestedDocuments,AttestedDocuments.document_ref == SavedDocuments.id).filter(SavedDocuments.user_id == user_id).all()
+    return documents
