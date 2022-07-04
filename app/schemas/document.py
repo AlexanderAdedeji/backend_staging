@@ -1,3 +1,4 @@
+from datetime import datetime
 import string
 from typing import List, Optional
 from pydantic import BaseModel
@@ -68,3 +69,9 @@ class PayForDocument(BaseModel):
 class AttestDocument(BaseModel):
     document_ref:str
     document:str
+
+class RetrieveDocument(BaseModel):
+    id:str
+    document_category:str
+    status:str
+    created_at:datetime

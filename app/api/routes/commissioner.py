@@ -38,8 +38,8 @@ def Login(login: CommissionerLogin,db: Session = Depends(get_db)):
         
         
         
-@router.post("/create_commisioner",
-             response_model=Commissioner
+@router.post("/create_commissioner",
+             response_model=CommissionerValidated
              )
 
 def signUp(commissioner: CommissionerCreate, db:Session= Depends(get_db)):
@@ -48,13 +48,16 @@ def signUp(commissioner: CommissionerCreate, db:Session= Depends(get_db)):
     if user_exist:
         raise HTTPException(status_code=403, detail ='this email already exists')
     
-    new_commissioner = commissioner_repo.create(db, commissioner_in=commissioner)
-    return Commissioner(
-        first_name=new_commissioner.first_name,
-        last_name= new_commissioner.last_name,
-        email = new_commissioner.email,
-    
-        )
+    new_commissioner =commissioner_repo.create(db, commissioner_in=commissioner)
+    return CommissionerValidated(
+                id=new_commissioner.id,
+                email = new_commissioner.email,
+                first_name=new_commissioner.first_name,
+                last_name=new_commissioner.last_name,
+                signature=new_commissioner.signature
+          
+
+            )
     
     
     

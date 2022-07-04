@@ -12,7 +12,7 @@ from app.models.attested_documents import AttestedDocuments
 from app.models.paid_documents import PaidDocuments
 from app.models.saved_documents import SavedDocuments
 
-from app.schemas.document import  Document, PayForDocument, SaveDocument
+from app.schemas.document import  Document, PayForDocument, RetrieveDocument, SaveDocument
 from app.settings.utilities import Utilities
 
 
@@ -125,5 +125,21 @@ def get_document_in_qr(documentRef:str, db:Session =Depends(get_db)):
 
 @router.get("/get_documents_saved_by_user")
 def get_documents_saved_by_user(user_id:str, db:Session =Depends(get_db)):
-    documents = db.query(SavedDocuments.document_category,SavedDocuments.id, SavedDocuments).outerjoin(PaidDocuments, PaidDocuments.saved_document_id == SavedDocuments.id).outerjoin(AttestedDocuments,AttestedDocuments.document_ref == SavedDocuments.id).filter(SavedDocuments.user_id == user_id).all()
-    return documents
+    new_array=[]
+    saved_documents =db.query(SavedDocuments.id,SavedDocuments.document_category, SavedDocuments.CreatedAt).filter(SavedDocuments.user_id == user_id).all()
+    for document in saved_documents:
+        paid = db.query(PaidDocuments.saved_document_id).filter(document.id == PaidDocuments.saved_document_id).all()
+        attested = db.query(AttestedDocuments.document_ref).filter(document.id == AttestedDocuments.document_ref).all()
+
+        if not attested:
+            if not paid:     
+                new_document = RetrieveDocument(status='Saved', document_category=document.document_category, id=document.id, created_at= document.CreatedAt)
+                new_array.append(new_document)
+            else:
+                new_document = RetrieveDocument(status='Paid', document_category=document.document_category, id=document.id, created_at= document.CreatedAt)
+                new_array.append(new_document)
+        else:
+             new_document = RetrieveDocument(status='Attested', document_category=document.document_category, id=document.id, created_at= document.CreatedAt)
+             new_array.append(new_document)
+
+    return new_array

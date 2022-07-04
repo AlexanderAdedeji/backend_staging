@@ -36,7 +36,7 @@ def Login(login: UserLogin,db: Session = Depends(get_db)):
         
         
 @router.post("/sign_up",
-             response_model=User
+             response_model=UserValidated
              )
 
 def signUp(user: UserCreate, db:Session= Depends(get_db)):
@@ -45,13 +45,17 @@ def signUp(user: UserCreate, db:Session= Depends(get_db)):
     if user_exist:
         raise HTTPException(status_code=403, detail ='this email already exists')
     
-    new_user = user_repo.create(db, user_in=user)
-    return User(
-        first_name=new_user.first_name,
-        last_name= new_user.last_name,
-        email = new_user.email,
-    
-        )
+    user = user_repo.create(db, user_in=user)
+    # user =  user_repo.get_by_email(db, email=new_user.email)
+    return UserValidated(
+                id=user.id,
+                email = user.email,
+                first_name=user.first_name,
+                last_name=user.last_name
+          
+
+            )
+        
     
     
     

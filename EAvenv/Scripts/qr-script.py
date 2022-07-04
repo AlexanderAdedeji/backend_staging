@@ -1,4 +1,4 @@
-#!"C:\Users\ALEX\Desktop\work\Identiko Integrated Solutions\e-affidavit\backend\EAenv\Scripts\python.exe"
+#!"C:\Users\ALEX\Desktop\work\Identiko Integrated Solutions\e-affidavit - Copy\backend\EAvenv\Scripts\python.exe"
 # EASY-INSTALL-ENTRY-SCRIPT: 'qrcode==7.3.1','console_scripts','qr'
 import re
 import sys
