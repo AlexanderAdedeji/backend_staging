@@ -12,5 +12,5 @@ class Settings(BaseSettings):
 
     class Config:
         env_file =os.getenv(
-            "ENV_VARIABLE_PATH", Path(__file__).parent / "ENV/.env"
+            "ENV_VARIABLE_PATH", Path(__file__).parent / "env/.env"
         )
