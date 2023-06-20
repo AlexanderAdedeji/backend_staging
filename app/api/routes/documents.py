@@ -20,12 +20,13 @@ router = APIRouter()
 
 
 
-@router.get("/get_document")
-def get_single_document(id:int):
+# @router.get("/get_document")
+# def get_single_document(documentRef:str,db:Session= Depends(get_db)):
+#     document = db.query(SavedDocuments).filter(SavedDocuments.document_ref==documentRef).first()
+#     if not document:
+#         raise HTTPException(status=404, detail=f"Document with id {documentRef} does not exist")
     
-    
-    
-    return {"documentId" :id}
+#     return document
 
 
 
@@ -33,7 +34,7 @@ def get_single_document(id:int):
 def save_document(document:SaveDocument,db:Session= Depends(get_db)):
     letters = string.ascii_lowercase 
     result1 = ''.join((random.sample(letters, 10)))  
-    input_data = f"https://eaffidavit-dev.netlify.app/qr-searchDocument/{result1.upper()}" 
+    input_data = f"https://e-affidavit-portal-demo.azurewebsites.net/qr-searchDocument/{result1.upper()}" 
     qr = qrcode.QRCode(
         version=1,
         box_size=10,
@@ -118,10 +119,11 @@ def random_ref(length:int):
 def get_document_in_qr(documentRef:str, db:Session =Depends(get_db)): 
     document = db.query(AttestedDocuments).filter(AttestedDocuments.document_ref==documentRef).first()
     if not document:
-        raise HTTPException(status=404, detail=f"Document with id {documentRef} does not exist")
+        document = db.query(SavedDocuments).filter(SavedDocuments.id == documentRef).first()
+        if not document:
+            raise HTTPException(status_code=404, detail=f'Document Does not exist') 
+    
     return document
-
-
 
 @router.get("/get_documents_saved_by_user")
 def get_documents_saved_by_user(user_id:str, db:Session =Depends(get_db)):

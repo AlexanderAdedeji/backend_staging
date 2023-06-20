@@ -65,7 +65,7 @@ def signUp(commissioner: CommissionerCreate, db:Session= Depends(get_db)):
 
 
 @router.get("/get_document" )
-def signUp(documentRef:str, db:Session= Depends(get_db)):
+def get_document(documentRef:str, db:Session= Depends(get_db)):
     document = db.query(SavedDocuments).filter(SavedDocuments.id == documentRef).first()
     if not document:
         raise HTTPException(status_code=404, detail=f'Document Does not exist') 
