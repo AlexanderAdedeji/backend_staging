@@ -28,7 +28,10 @@ router = APIRouter()
     
 #     return document
 
-
+@router.get("/get_my_documents")
+def get_my_documents(id:int,db:Session= Depends(get_db)):
+    document = db.query(SavedDocuments).filter(SavedDocuments.user_id==id).first()    
+    return document
 
 @router.post("/save_document")
 def save_document(document:SaveDocument,db:Session= Depends(get_db)):
