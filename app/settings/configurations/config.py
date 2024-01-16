@@ -1,8 +1,8 @@
 import os
-from pydantic import BaseSettings
+# from pydantic import BaseSettings
 from pathlib import Path
 
 
 
-class Settings(BaseSettings):
+class Settings():
     pass

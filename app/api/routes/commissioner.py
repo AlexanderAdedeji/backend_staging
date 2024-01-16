@@ -30,7 +30,8 @@ def Login(login: CommissionerLogin,db: Session = Depends(get_db)):
                 email = commissioner.email,
                 first_name=commissioner.first_name,
                 last_name=commissioner.last_name,
-                signature=commissioner.signature
+                signature=commissioner.signature,
+                stamp=commissioner.stamp
           
 
             )
